@@ -228,4 +228,23 @@ main{padding:1rem;}
 .recu-totaux{ font-size:.78rem; border-top:1px dashed var(--encre); padding-top:.5rem; }
 .recu-totaux div{ display:flex; justify-content:space-between; padding:.12rem 0; }
 .recu-total-final{ font-weight:700; font-size:.95rem; color:var(--vert-registre); border-top:1px dashed var(--encre); margin-top:.2rem; padding-top:.3rem !important; }
-.recu-pied{ text-align:center; font-size:.7rem; color:#8A8272; margin:.8rem 0; font-style:italic; }
+.recu.recu-pied{ text-align:center; font-size:.7rem; color:#8A8272; margin:.8rem 0; font-style:italic; }
+
+@media print {
+  body{ background:none; }
+  .topbar, .tabs, main, #btnImprimerRecu, #btnFermerRecu{ display:none !important; }
+  .modale{
+    position:static;
+    background:none;
+    padding:0;
+    display:block;
+  }
+  .recu{
+    box-shadow:none;
+    max-width:80mm;
+    width:80mm;
+    margin:0 auto;
+    background-image:none;
+    padding:4mm;
+  }
+}
