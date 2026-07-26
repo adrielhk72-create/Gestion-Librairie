@@ -186,8 +186,8 @@ document.getElementById('btnValiderVente').addEventListener('click', async () =>
     return;
   }
 
-  const facture = await fetch(`/api/factures/${data.factureId}`).then(r=>r.json());
-  afficherRecu(facture);
+ const facture = await fetch(`/api/factures/${data.factureId}`).then(r=>r.json());
+  afficherRecu(facture, true); 
 
   panier = [];
   document.getElementById('remiseInput').value = 0;
