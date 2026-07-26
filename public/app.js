@@ -215,8 +215,16 @@ function afficherRecu(f, imprimerAuto=false){
     f.statut === 'payee' ? 'PAYÉ' : (f.statut === 'partielle' ? 'PARTIEL' : 'IMPAYÉ');
   document.getElementById('modaleFacture').style.display = 'flex';
 }
+document.getElementById('modaleFacture').style.display = 'flex';
+
+  if (imprimerAuto){
+    setTimeout(() => window.print(), 300);
+  }
+}
+document.getElementById('btnImprimerRecu').addEventListener('click', () => {
+  window.print();
+});
 document.getElementById('btnFermerRecu').addEventListener('click', () => {
-  document.getElementById('modaleFacture').style.display = 'none';
 });
 
 /* ---------------- STOCK ---------------- */
