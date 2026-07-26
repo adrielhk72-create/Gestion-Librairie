@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Librairie — Gestion & Facturation</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">✦</span>
+    <div>
+      <div class="brand-name">Ma Librairie</div>
+      <div class="brand-sub">Stock · Ventes · Comptabilité</div>
+    </div>
+  </div>
+  <div id="clock" class="clock"></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="vente">Vente</button>
+  <button class="tab" data-tab="stock">Stock</button>
+  <button class="tab" data-tab="achats">Achats</button>
+  <button class="tab" data-tab="factures">Factures</button>
+  <button class="tab" data-tab="rapports">Rapports</button>
+</nav>
+
+<main>
+
+  <!-- ===== VENTE / FACTURATION ===== -->
+  <section id="vente" class="panel active">
+    <div class="vente-grid">
+      <div class="produits-pane">
+        <input id="rechercheProduit" class="search" type="text" placeholder="Rechercher un produit…" />
+        <div id="listeProduits" class="produit-cards"></div>
+      </div>
+
+      <div class="panier-pane">
+        <h2>Facture <span id="numeroApercu" class="muted"></span></h2>
+        <div id="panierLignes" class="panier-lignes">
+          <p class="muted vide-msg">Aucun article. Touchez un produit pour l'ajouter.</p>
+        </div>
+
+        <div class="champ">
+          <label for="clientSelect">Client (optionnel)</label>
+          <select id="clientSelect">
+            <option value="">Client de passage</option>
+          </select>
+        </div>
+
+        <div class="champ-row">
+          <div class="champ">
+            <label for="remiseInput">Remise (FCFA)</label>
+            <input id="remiseInput" type="number" min="0" value="0" />
+          </div>
+          <div class="champ">
+            <label for="modePaiement">Paiement</label>
+            <select id="modePaiement">
+              <option value="especes">Espèces</option>
+              <option value="orange_money">Orange Money</option>
+              <option value="mtn_momo">MTN MoMo</option>
+              <option value="carte">Carte</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="champ">
+          <label for="montantPaye">Montant payé (FCFA)</label>
+          <input id="montantPaye" type="number" min="0" placeholder="= total si laissé vide" />
+        </div>
+
+        <div class="totaux">
+          <div class="ligne-total"><span>Sous-total</span><span id="sousTotal">0 FCFA</span></div>
+          <div class="ligne-total total-final"><span>Total à payer</span><span id="totalFinal">0 FCFA</span></div>
+        </div>
+
+        <button id="btnValiderVente" class="btn-primary">Encaisser & générer la facture</button>
+        <p id="venteMessage" class="message"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STOCK ===== -->
+  <section id="stock" class="panel">
+    <div class="section-head">
+      <h2>Produits en stock</h2>
+      <button class="btn-secondary" id="btnOuvrirNouveauProduit">+ Nouveau produit</button>
+    </div>
+
+    <div id="alerteStock" class="alerte-stock" style="display:none"></div>
+
+    <table class="table" id="tableStock">
+      <thead>
+        <tr><th>Produit</th><th>Catégorie</th><th>Prix achat</th><th>Prix vente</th><th>Marge</th><th>Stock</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="formNouveauProduit" class="carte-form" style="display:none">
+      <h3>Nouveau produit</h3>
+      <div class="champ"><label>Nom</label><input id="npNom" type="text" /></div>
+      <div class="champ-row">
+        <div class="champ"><label>Catégorie</label><select id="npCategorie"></select></div>
+        <div class="champ"><label>Fournisseur</label><select id="npFournisseur"></select></div>
+      </div>
+      <div class="champ-row">
+        <div class="champ"><label>Prix d'achat</label><input id="npPrixAchat" type="number" min="0" /></div>
+        <div class="champ"><label>Prix de vente</label><input id="npPrixVente" type="number" min="0" /></div>
+      </div>
+      <div class="champ-row">
+        <div class="champ"><label>Stock initial</label><input id="npStock" type="number" min="0" value="0" /></div>
+        <div class="champ"><label>Seuil d'alerte</label><input id="npSeuil" type="number" min="0" value="5" /></div>
+      </div>
+      <div class="champ-row">
+        <button class="btn-primary" id="btnCreerProduit">Enregistrer</button>
+        <button class="btn-lien" id="btnAnnulerProduit">Annuler</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACHATS ===== -->
+  <section id="achats" class="panel">
+    <h2>Enregistrer une entrée de stock (achat)</h2>
+    <div class="carte-form">
+      <div class="champ">
+        <label>Produit</label>
+        <select id="achatProduit"></select>
+      </div>
+      <div class="champ-row">
+        <div class="champ"><label>Quantité reçue</label><input id="achatQuantite" type="number" min="1" value="1" /></div>
+        <div class="champ"><label>Prix d'achat unitaire</label><input id="achatPrix" type="number" min="0" /></div>
+      </div>
+      <div class="champ"><label>Fournisseur</label><select id="achatFournisseur"></select></div>
+      <button class="btn-primary" id="btnEnregistrerAchat">Ajouter au stock</button>
+      <p id="achatMessage" class="message"></p>
+    </div>
+
+    <h3 class="mt">Historique des achats</h3>
+    <table class="table">
+      <thead><tr><th>Date</th><th>Produit</th><th>Qté</th><th>Prix unit.</th></tr></thead>
+      <tbody id="tableAchats"></tbody>
+    </table>
+  </section>
+
+  <!-- ===== FACTURES ===== -->
+  <section id="factures" class="panel">
+    <h2>Historique des factures</h2>
+    <table class="table">
+      <thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Total</th><th>Statut</th><th></th></tr></thead>
+      <tbody id="tableFactures"></tbody>
+    </table>
+  </section>
+
+  <!-- ===== RAPPORTS ===== -->
+  <section id="rapports" class="panel">
+    <h2>Rapports</h2>
+    <div class="cartes-rapport">
+      <div class="carte-rapport">
+        <div class="carte-label">Recette du jour</div>
+        <div class="carte-valeur" id="rapRecette">0 FCFA</div>
+      </div>
+      <div class="carte-rapport">
+        <div class="carte-label">Bénéfice du jour</div>
+        <div class="carte-valeur" id="rapBenefice">0 FCFA</div>
+      </div>
+      <div class="carte-rapport">
+        <div class="carte-label">Factures émises</div>
+        <div class="carte-valeur" id="rapNbFactures">0</div>
+      </div>
+    </div>
+
+    <h3 class="mt">Produits les plus vendus</h3>
+    <table class="table">
+      <thead><tr><th>Produit</th><th>Qté vendue</th><th>Chiffre d'affaires</th></tr></thead>
+      <tbody id="tableTop"></tbody>
+    </table>
+
+    <h3 class="mt">Stock faible</h3>
+    <table class="table">
+      <thead><tr><th>Produit</th><th>Stock restant</th><th>Seuil</th></tr></thead>
+      <tbody id="tableStockFaible"></tbody>
+    </table>
+  </section>
+
+</main>
+
+<!-- ===== MODALE FACTURE (recu) ===== -->
+<div id="modaleFacture" class="modale" style="display:none">
+  <div class="recu">
+    <div class="recu-tampon" id="recuTampon">PAYÉ</div>
+    <div class="recu-entete">
+      <div class="recu-titre">Ma Librairie</div>
+      <div class="recu-sous">Reçu de vente</div>
+    </div>
+    <div class="recu-meta">
+      <div><span>N° facture</span><strong id="recuNumero"></strong></div>
+      <div><span>Date</span><strong id="recuDate"></strong></div>
+      <div><span>Client</span><strong id="recuClient"></strong></div>
+    </div>
+    <table class="recu-table">
+      <thead><tr><th>Produit</th><th>Qté</th><th>P.U.</th><th>Total</th></tr></thead>
+      <tbody id="recuLignes"></tbody>
+    </table>
+    <div class="recu-totaux">
+      <div><span>Sous-total</span><span id="recuSousTotal"></span></div>
+      <div><span>Remise</span><span id="recuRemise"></span></div>
+      <div class="recu-total-final"><span>Total</span><span id="recuTotal"></span></div>
+      <div><span>Payé</span><span id="recuPaye"></span></div>
+      <div><span>Mode</span><span id="recuMode"></span></div>
+    </div>
+    <div class="recu-pied">Merci de votre confiance</div>
+    <button class="btn-primary" id="btnFermerRecu">Nouvelle vente</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
