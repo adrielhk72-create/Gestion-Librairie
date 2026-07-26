@@ -1,0 +1,16 @@
+{
+  "name": "gestion-librairie",
+  "version": "1.0.0",
+  "description": "Systeme de gestion de librairie et de comptabilite (stock, ventes, facturation)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

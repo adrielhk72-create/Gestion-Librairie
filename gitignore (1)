@@ -1,0 +1,5 @@
+node_modules/
+librairie.db
+librairie.db-shm
+librairie.db-wal
+.env
