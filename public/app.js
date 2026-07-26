@@ -198,7 +198,7 @@ document.getElementById('btnValiderVente').addEventListener('click', async () =>
 });
 
 /* ---------------- RECU ---------------- */
-function afficherRecu(f){
+function afficherRecu(f, imprimerAuto=false){
   document.getElementById('recuNumero').textContent = f.numero;
   document.getElementById('recuDate').textContent = new Date(f.date).toLocaleString('fr-FR');
   document.getElementById('recuClient').textContent = f.client_nom || 'Client de passage';
